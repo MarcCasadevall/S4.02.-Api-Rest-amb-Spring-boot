@@ -6,6 +6,8 @@ import cat.itacademy.s04.t02.n01.fruit.model.Fruit;
 import cat.itacademy.s04.t02.n01.fruit.repository.FruitRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class FruitService {
 
@@ -21,4 +23,10 @@ public class FruitService {
         return new FruitResponseDTO(savedFruit.getId(), savedFruit.getName(), savedFruit.getWeightKg());
     }
 
+    public List<FruitResponseDTO> getAllFruits() {
+        return fruitRepository.findAll()
+                .stream()
+                .map(fruit -> new FruitResponseDTO(fruit.getId(), fruit.getName(), fruit.getWeightKg()))
+                .toList();
+    }
 }
