@@ -11,8 +11,11 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -63,5 +66,21 @@ class FruitControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isBadRequest());
+    }
+    @Test
+    void getAllFruits_shouldReturn200WithList() throws Exception {
+        List<FruitResponseDTO> responseDTOs = List.of(
+                new FruitResponseDTO(1L, "Apple", 1.5),
+                new FruitResponseDTO(2L, "Banana", 0.8)
+        );
+
+        when(fruitService.getAllFruits()).thenReturn(responseDTOs);
+
+        mockMvc.perform(get("/fruits")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].name").value("Apple"))
+                .andExpect(jsonPath("$[1].name").value("Banana"));
     }
 }

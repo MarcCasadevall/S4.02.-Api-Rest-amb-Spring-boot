@@ -10,6 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -37,5 +39,20 @@ class FruitServiceTest {
         assertEquals(1L, responseDTO.getId());
         assertEquals("Apple", responseDTO.getName());
         assertEquals(1.5, responseDTO.getWeightKg());
+    }
+    @Test
+    void getAllFruits_shouldReturnListOfFruitResponseDTO() {
+        List<Fruit> fruits = List.of(
+                new Fruit(1L, "Apple", 1.5),
+                new Fruit(2L, "Banana", 0.8)
+        );
+
+        when(fruitRepository.findAll()).thenReturn(fruits);
+
+        List<FruitResponseDTO> result = fruitService.getAllFruits();
+
+        assertEquals(2, result.size());
+        assertEquals("Apple", result.get(0).getName());
+        assertEquals("Banana", result.get(1).getName());
     }
 }

@@ -20,4 +20,5 @@ public class FruitService {
         Fruit savedFruit = fruitRepository.save(fruit);
         return new FruitResponseDTO(savedFruit.getId(), savedFruit.getName(), savedFruit.getWeightKg());
     }
+
 }
