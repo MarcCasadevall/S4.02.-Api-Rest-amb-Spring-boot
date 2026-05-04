@@ -43,4 +43,9 @@ public class FruitService {
         Fruit updatedFruit = fruitRepository.save(fruit);
         return new FruitResponseDTO(updatedFruit.getId(), updatedFruit.getName(), updatedFruit.getWeightKg());
     }
+    public void deleteFruit(Long id) {
+        fruitRepository.findById(id)
+                .orElseThrow(() -> new FruitNotFoundException(id));
+        fruitRepository.deleteById(id);
+    }
 }
