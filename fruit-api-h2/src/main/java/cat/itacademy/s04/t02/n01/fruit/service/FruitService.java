@@ -35,4 +35,12 @@ public class FruitService {
                 .orElseThrow(() -> new FruitNotFoundException(id));
         return new FruitResponseDTO(fruit.getId(), fruit.getName(), fruit.getWeightKg());
     }
+    public FruitResponseDTO updateFruit(Long id, FruitRequestDTO requestDTO) {
+        Fruit fruit = fruitRepository.findById(id)
+                .orElseThrow(() -> new FruitNotFoundException(id));
+        fruit.setName(requestDTO.getName());
+        fruit.setWeightKg(requestDTO.getWeightKg());
+        Fruit updatedFruit = fruitRepository.save(fruit);
+        return new FruitResponseDTO(updatedFruit.getId(), updatedFruit.getName(), updatedFruit.getWeightKg());
+    }
 }
