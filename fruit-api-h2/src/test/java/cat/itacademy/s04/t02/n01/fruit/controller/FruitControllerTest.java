@@ -16,8 +16,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -105,5 +104,42 @@ class FruitControllerTest {
         mockMvc.perform(get("/fruits/99")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+    }
+    @Test
+    void updateFruit_withValidData_shouldReturn200() throws Exception {
+        FruitRequestDTO requestDTO = new FruitRequestDTO("Mango", 2.0);
+        FruitResponseDTO responseDTO = new FruitResponseDTO(1L, "Mango", 2.0);
+
+        when(fruitService.updateFruit(any(Long.class), any(FruitRequestDTO.class))).thenReturn(responseDTO);
+
+        mockMvc.perform(put("/fruits/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Mango"))
+                .andExpect(jsonPath("$.weightKg").value(2.0));
+    }
+
+    @Test
+    void updateFruit_withNonExistingId_shouldReturn404() throws Exception {
+        FruitRequestDTO requestDTO = new FruitRequestDTO("Mango", 2.0);
+
+        when(fruitService.updateFruit(any(Long.class), any(FruitRequestDTO.class)))
+                .thenThrow(new FruitNotFoundException(99L));
+
+        mockMvc.perform(put("/fruits/99")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDTO)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void updateFruit_withInvalidData_shouldReturn400() throws Exception {
+        FruitRequestDTO requestDTO = new FruitRequestDTO("", -1.0);
+
+        mockMvc.perform(put("/fruits/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDTO)))
+                .andExpect(status().isBadRequest());
     }
 }

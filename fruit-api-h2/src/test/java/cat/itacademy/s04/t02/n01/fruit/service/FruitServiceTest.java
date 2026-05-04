@@ -76,4 +76,29 @@ class FruitServiceTest {
 
         assertThrows(FruitNotFoundException.class, () -> fruitService.getFruitById(99L));
     }
+
+    @Test
+    void updateFruit_withExistingId_shouldReturnUpdatedFruitResponseDTO() {
+        FruitRequestDTO requestDTO = new FruitRequestDTO("Mango", 2.0);
+        Fruit existingFruit = new Fruit(1L, "Apple", 1.5);
+        Fruit updatedFruit = new Fruit(1L, "Mango", 2.0);
+
+        when(fruitRepository.findById(1L)).thenReturn(Optional.of(existingFruit));
+        when(fruitRepository.save(any(Fruit.class))).thenReturn(updatedFruit);
+
+        FruitResponseDTO result = fruitService.updateFruit(1L, requestDTO);
+
+        assertNotNull(result);
+        assertEquals("Mango", result.getName());
+        assertEquals(2.0, result.getWeightKg());
+    }
+
+    @Test
+    void updateFruit_withNonExistingId_shouldThrowFruitNotFoundException() {
+        FruitRequestDTO requestDTO = new FruitRequestDTO("Mango", 2.0);
+
+        when(fruitRepository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(FruitNotFoundException.class, () -> fruitService.updateFruit(99L, requestDTO));
+    }
 }
