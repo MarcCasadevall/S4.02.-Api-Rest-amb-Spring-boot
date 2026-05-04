@@ -2,6 +2,7 @@ package cat.itacademy.s04.t02.n01.fruit.service;
 
 import cat.itacademy.s04.t02.n01.fruit.dto.FruitRequestDTO;
 import cat.itacademy.s04.t02.n01.fruit.dto.FruitResponseDTO;
+import cat.itacademy.s04.t02.n01.fruit.exception.FruitNotFoundException;
 import cat.itacademy.s04.t02.n01.fruit.model.Fruit;
 import cat.itacademy.s04.t02.n01.fruit.repository.FruitRepository;
 import org.springframework.stereotype.Service;
@@ -28,5 +29,10 @@ public class FruitService {
                 .stream()
                 .map(fruit -> new FruitResponseDTO(fruit.getId(), fruit.getName(), fruit.getWeightKg()))
                 .toList();
+    }
+    public FruitResponseDTO getFruitById(Long id) {
+        Fruit fruit = fruitRepository.findById(id)
+                .orElseThrow(() -> new FruitNotFoundException(id));
+        return new FruitResponseDTO(fruit.getId(), fruit.getName(), fruit.getWeightKg());
     }
 }
