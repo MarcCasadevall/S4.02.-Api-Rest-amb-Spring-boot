@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -100,5 +101,22 @@ class FruitServiceTest {
         when(fruitRepository.findById(99L)).thenReturn(Optional.empty());
 
         assertThrows(FruitNotFoundException.class, () -> fruitService.updateFruit(99L, requestDTO));
+    }
+    @Test
+    void deleteFruit_withExistingId_shouldDeleteFruit() {
+        Fruit fruit = new Fruit(1L, "Apple", 1.5);
+
+        when(fruitRepository.findById(1L)).thenReturn(Optional.of(fruit));
+
+        fruitService.deleteFruit(1L);
+
+        verify(fruitRepository).deleteById(1L);
+    }
+
+    @Test
+    void deleteFruit_withNonExistingId_shouldThrowFruitNotFoundException() {
+        when(fruitRepository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(FruitNotFoundException.class, () -> fruitService.deleteFruit(99L));
     }
 }
