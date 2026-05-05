@@ -30,8 +30,8 @@ class FruitServiceTest {
 
     @Test
     void createFruit_shouldReturnFruitResponseDTO() {
-        FruitRequestDTO requestDTO = new FruitRequestDTO("Apple", 1.5);
-        Fruit savedFruit = new Fruit(1L, "Apple", 1.5);
+        FruitRequestDTO requestDTO = new FruitRequestDTO("Apple", 1.5,null);
+        Fruit savedFruit = new Fruit(1L, "Apple", 1.5,null);
 
         when(fruitRepository.save(any(Fruit.class))).thenReturn(savedFruit);
 
@@ -45,8 +45,8 @@ class FruitServiceTest {
     @Test
     void getAllFruits_shouldReturnListOfFruitResponseDTO() {
         List<Fruit> fruits = List.of(
-                new Fruit(1L, "Apple", 1.5),
-                new Fruit(2L, "Banana", 0.8)
+                new Fruit(1L, "Apple", 1.5,null),
+                new Fruit(2L, "Banana", 0.8, null)
         );
 
         when(fruitRepository.findAll()).thenReturn(fruits);
@@ -59,7 +59,7 @@ class FruitServiceTest {
     }
     @Test
     void getFruitById_withExistingId_shouldReturnFruitResponseDTO() {
-        Fruit fruit = new Fruit(1L, "Apple", 1.5);
+        Fruit fruit = new Fruit(1L, "Apple", 1.5, null);
 
         when(fruitRepository.findById(1L)).thenReturn(Optional.of(fruit));
 
@@ -80,9 +80,9 @@ class FruitServiceTest {
 
     @Test
     void updateFruit_withExistingId_shouldReturnUpdatedFruitResponseDTO() {
-        FruitRequestDTO requestDTO = new FruitRequestDTO("Mango", 2.0);
-        Fruit existingFruit = new Fruit(1L, "Apple", 1.5);
-        Fruit updatedFruit = new Fruit(1L, "Mango", 2.0);
+        FruitRequestDTO requestDTO = new FruitRequestDTO("Mango", 2.0, null);
+        Fruit existingFruit = new Fruit(1L, "Apple", 1.5,null);
+        Fruit updatedFruit = new Fruit(1L, "Mango", 2.0, null);
 
         when(fruitRepository.findById(1L)).thenReturn(Optional.of(existingFruit));
         when(fruitRepository.save(any(Fruit.class))).thenReturn(updatedFruit);
@@ -96,7 +96,7 @@ class FruitServiceTest {
 
     @Test
     void updateFruit_withNonExistingId_shouldThrowFruitNotFoundException() {
-        FruitRequestDTO requestDTO = new FruitRequestDTO("Mango", 2.0);
+        FruitRequestDTO requestDTO = new FruitRequestDTO("Mango", 2.0, null);
 
         when(fruitRepository.findById(99L)).thenReturn(Optional.empty());
 
@@ -104,7 +104,7 @@ class FruitServiceTest {
     }
     @Test
     void deleteFruit_withExistingId_shouldDeleteFruit() {
-        Fruit fruit = new Fruit(1L, "Apple", 1.5);
+        Fruit fruit = new Fruit(1L, "Apple", 1.5, null);
 
         when(fruitRepository.findById(1L)).thenReturn(Optional.of(fruit));
 

@@ -35,7 +35,7 @@ class FruitControllerTest {
 
     @Test
     void createFruit_withValidData_shouldReturn201() throws Exception {
-        FruitRequestDTO requestDTO = new FruitRequestDTO("Apple", 1.5);
+        FruitRequestDTO requestDTO = new FruitRequestDTO("Apple", 1.5, 1L);
         FruitResponseDTO responseDTO = new FruitResponseDTO(1L, "Apple", 1.5);
 
         when(fruitService.createFruit(any(FruitRequestDTO.class))).thenReturn(responseDTO);
@@ -51,7 +51,7 @@ class FruitControllerTest {
 
     @Test
     void createFruit_withBlankName_shouldReturn400() throws Exception {
-        FruitRequestDTO requestDTO = new FruitRequestDTO("", 1.5);
+        FruitRequestDTO requestDTO = new FruitRequestDTO("", 1.5, 1L);
 
         mockMvc.perform(post("/fruits")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -61,7 +61,7 @@ class FruitControllerTest {
 
     @Test
     void createFruit_withInvalidWeight_shouldReturn400() throws Exception {
-        FruitRequestDTO requestDTO = new FruitRequestDTO("Apple", -1.0);
+        FruitRequestDTO requestDTO = new FruitRequestDTO("Apple", -1.0, 1L);
 
         mockMvc.perform(post("/fruits")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -108,7 +108,7 @@ class FruitControllerTest {
     }
     @Test
     void updateFruit_withValidData_shouldReturn200() throws Exception {
-        FruitRequestDTO requestDTO = new FruitRequestDTO("Mango", 2.0);
+        FruitRequestDTO requestDTO = new FruitRequestDTO("Mango", 2.0, 1L);
         FruitResponseDTO responseDTO = new FruitResponseDTO(1L, "Mango", 2.0);
 
         when(fruitService.updateFruit(any(Long.class), any(FruitRequestDTO.class))).thenReturn(responseDTO);
@@ -123,7 +123,7 @@ class FruitControllerTest {
 
     @Test
     void updateFruit_withNonExistingId_shouldReturn404() throws Exception {
-        FruitRequestDTO requestDTO = new FruitRequestDTO("Mango", 2.0);
+        FruitRequestDTO requestDTO = new FruitRequestDTO("Mango", 2.0,1L);
 
         when(fruitService.updateFruit(any(Long.class), any(FruitRequestDTO.class)))
                 .thenThrow(new FruitNotFoundException(99L));
@@ -136,7 +136,7 @@ class FruitControllerTest {
 
     @Test
     void updateFruit_withInvalidData_shouldReturn400() throws Exception {
-        FruitRequestDTO requestDTO = new FruitRequestDTO("", -1.0);
+        FruitRequestDTO requestDTO = new FruitRequestDTO("", -1.0 ,1L);
 
         mockMvc.perform(put("/fruits/1")
                         .contentType(MediaType.APPLICATION_JSON)
