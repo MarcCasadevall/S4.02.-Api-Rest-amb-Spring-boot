@@ -37,4 +37,10 @@ public class GlobalExceptionHandler {
         error.put("error", exception.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
+    @ExceptionHandler(ProviderHasFruitsException.class)
+    public ResponseEntity<Map<String, String>> handleProviderHasFruitsException(ProviderHasFruitsException exception) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
 }

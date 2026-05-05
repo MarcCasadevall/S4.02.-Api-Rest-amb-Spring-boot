@@ -2,8 +2,11 @@ package cat.itacademy.s04.t02.n01.fruit.service;
 
 import cat.itacademy.s04.t02.n01.fruit.dto.ProviderRequestDTO;
 import cat.itacademy.s04.t02.n01.fruit.dto.ProviderResponseDTO;
+import cat.itacademy.s04.t02.n01.fruit.exception.ProviderHasFruitsException;
 import cat.itacademy.s04.t02.n01.fruit.exception.ProviderNotFoundException;
+import cat.itacademy.s04.t02.n01.fruit.model.Fruit;
 import cat.itacademy.s04.t02.n01.fruit.model.Provider;
+import cat.itacademy.s04.t02.n01.fruit.repository.FruitRepository;
 import cat.itacademy.s04.t02.n01.fruit.repository.ProviderRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +16,11 @@ import java.util.List;
 public class ProviderService {
 
     private final ProviderRepository providerRepository;
+    private final FruitRepository fruitRepository;
 
-    public ProviderService(ProviderRepository providerRepository) {
+    public ProviderService(ProviderRepository providerRepository, FruitRepository fruitRepository) {
         this.providerRepository = providerRepository;
+        this.fruitRepository = fruitRepository;
     }
 
     public ProviderResponseDTO createProvider(ProviderRequestDTO requestDTO) {
@@ -43,6 +48,10 @@ public class ProviderService {
     public void deleteProvider(Long id) {
         providerRepository.findById(id)
                 .orElseThrow(() -> new ProviderNotFoundException(id));
+        List<Fruit> fruits = fruitRepository.findByProviderId(id);
+        if (!fruits.isEmpty()) {
+            throw new ProviderHasFruitsException(id);
+        }
         providerRepository.deleteById(id);
     }
 }
