@@ -65,4 +65,13 @@ public class FruitService {
     private FruitResponseDTO toResponseDTO(Fruit fruit) {
         return new FruitResponseDTO(fruit.getId(), fruit.getName(), fruit.getWeightKg());
     }
+
+    public List<FruitResponseDTO> getFruitsByProvider(Long providerId) {
+        providerRepository.findById(providerId)
+                .orElseThrow(() -> new ProviderNotFoundException(providerId));
+        return fruitRepository.findByProviderId(providerId)
+                .stream()
+                .map(this::toResponseDTO)
+                .toList();
+    }
 }

@@ -49,4 +49,10 @@ public class FruitController {
         fruitService.deleteFruit(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping
+    public ResponseEntity<List<FruitResponseDTO>> getFruitsByProvider(@RequestParam Long providerId) {
+        List<FruitResponseDTO> fruits = fruitService.getFruitsByProvider(providerId);
+        return ResponseEntity.ok(fruits);
+    }
 }
