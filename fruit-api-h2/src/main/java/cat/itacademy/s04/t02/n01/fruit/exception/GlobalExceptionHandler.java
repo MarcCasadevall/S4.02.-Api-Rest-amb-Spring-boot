@@ -30,4 +30,11 @@ public class GlobalExceptionHandler {
         error.put("error", exception.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
+
+    @ExceptionHandler(ProviderNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleProviderNotFoundException(ProviderNotFoundException exception) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", exception.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
 }
