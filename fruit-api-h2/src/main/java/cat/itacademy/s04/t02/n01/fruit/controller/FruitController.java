@@ -25,21 +25,25 @@ public class FruitController {
         FruitResponseDTO responseDTO = fruitService.createFruit(requestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
+
     @GetMapping
     public ResponseEntity<List<FruitResponseDTO>> getAllFruits() {
         List<FruitResponseDTO> fruits = fruitService.getAllFruits();
         return ResponseEntity.ok(fruits);
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<FruitResponseDTO> getFruitById(@PathVariable Long id) {
         FruitResponseDTO responseDTO = fruitService.getFruitById(id);
         return ResponseEntity.ok(responseDTO);
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<FruitResponseDTO> updateFruit(@PathVariable Long id, @Valid @RequestBody FruitRequestDTO requestDTO) {
         FruitResponseDTO responseDTO = fruitService.updateFruit(id, requestDTO);
         return ResponseEntity.ok(responseDTO);
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFruit(@PathVariable Long id) {
         fruitService.deleteFruit(id);
