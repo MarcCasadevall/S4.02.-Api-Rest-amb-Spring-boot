@@ -26,11 +26,6 @@ public class FruitController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
-    @GetMapping
-    public ResponseEntity<List<FruitResponseDTO>> getAllFruits() {
-        List<FruitResponseDTO> fruits = fruitService.getAllFruits();
-        return ResponseEntity.ok(fruits);
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<FruitResponseDTO> getFruitById(@PathVariable Long id) {
@@ -51,8 +46,10 @@ public class FruitController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FruitResponseDTO>> getFruitsByProvider(@RequestParam Long providerId) {
-        List<FruitResponseDTO> fruits = fruitService.getFruitsByProvider(providerId);
-        return ResponseEntity.ok(fruits);
+    public ResponseEntity<List<FruitResponseDTO>> getFruits(@RequestParam(required = false) Long providerId) {
+        if (providerId != null) {
+            return ResponseEntity.ok(fruitService.getFruitsByProvider(providerId));
+        }
+        return ResponseEntity.ok(fruitService.getAllFruits());
     }
 }
