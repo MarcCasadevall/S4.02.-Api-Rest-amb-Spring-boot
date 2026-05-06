@@ -8,6 +8,14 @@ services:
     ports:
       - "3307:3306"
 
+  mongodb:
+    image: mongo:7.0
+    container_name: fruit-mongodb
+    environment:
+      MONGO_INITDB_DATABASE: orders_db
+    ports:
+      - "27017:27017"
+
   app:
     build: .
     container_name: fruit-app
@@ -19,3 +27,4 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
     depends_on:
       - mysql
+      - mongodb
